@@ -12,7 +12,9 @@ nothing else in the project.
 
 ```
 domain/            Entities, repository interfaces, domain events, exceptions.
-                    No framework, no I/O, no dependency on any other layer.
+                    No I/O and no dependency on an outer layer. The one
+                    third-party import is Pydantic, reached through the shared
+                    Event base that domain events derive from.
 application/        Use-case services and their interfaces. Orchestrates domain
                     objects and repositories; depends only on domain + contracts.
 contracts/          Pydantic request/response schemas (the API's DTOs),
@@ -28,7 +30,8 @@ shared_domain/      Value types and the base Event model shared across bounded
                     contexts (e.g. BookType, the Event/DomainEvent hierarchy).
 db_migrator/        Alembic migration environment and versions.
 web/                Next.js frontend that consumes the API.
-tests/              Pytest suite (currently covers the event bus).
+tests/              Pytest suite: the event model, the event bus, and the
+                    author→book wiring exercised through the running app.
 ```
 
 Each bounded context (`author`, `book`) repeats the same shape across
