@@ -1,0 +1,31 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from api.exceptions import register_exception_handlers
+from api.routes.authors import router as authors_router
+from api.routes.books import router as books_router
+
+app = FastAPI(title="FastAPI DDD Clean Architecture")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+register_exception_handlers(app)
+
+app.include_router(authors_router)
+app.include_router(books_router)
+
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello, FastAPI!"}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
